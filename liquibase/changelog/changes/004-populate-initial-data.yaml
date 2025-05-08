@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004
+      author: feature-engineering
+      changes:
+        - insert:
+            tableName: customers
+            columns:
+              - column:
+                  name: customer_id
+                  value: "CUST001"
+              - column:
+                  name: age
+                  value: "35"
+              - column:
+                  name: gender
+                  value: "Male"
+              - column:
+                  name: tenure
+                  value: "24"
+              - column:
+                  name: monthly_charges
+                  value: "65.5"
+              - column:
+                  name: total_charges
+                  value: "1572.0"
+              - column:
+                  name: contract_type
+                  value: "Month-to-month"
+              - column:
+                  name: payment_method
+                  value: "Electronic check"
+              - column:
+                  name: churn
+                  valueBoolean: false
+        - insert:
+            tableName: feature_sets
+            columns:
+              - column:
+                  name: name
+                  value: "customer_features"
+              - column:
+                  name: description
+                  value: "Basic customer features for churn prediction"
+              - column:
+                  name: features
+                  value: '["age", "tenure", "monthly_charges", "total_charges"]'
+        - insert:
+            tableName: models
+            columns:
+              - column:
+                  name: name
+                  value: "churn_predictor"
+              - column:
+                  name: version
+                  value: "1.0.0"
+              - column:
+                  name: feature_set_id
+                  value: "1"
+              - column:
+                  name: model_type
+                  value: "random_forest"
+              - column:
+                  name: metrics
+                  value: '{"accuracy": 0.85, "f1_score": 0.82}' 

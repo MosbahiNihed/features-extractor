@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: feature-engineering
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: age
+                  type: int
+              - column:
+                  name: gender
+                  type: varchar(255)
+              - column:
+                  name: tenure
+                  type: int
+              - column:
+                  name: monthly_charges
+                  type: float
+              - column:
+                  name: total_charges
+                  type: float
+              - column:
+                  name: contract_type
+                  type: varchar(255)
+              - column:
+                  name: payment_method
+                  type: varchar(255)
+              - column:
+                  name: churn
+                  type: boolean
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            tableName: customers
+            indexName: idx_customers_customer_id
+            columns:
+              - column:
+                  name: customer_id 
