@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: changes/001-create-customers-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/002-create-feature-sets-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/003-create-models-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/004-populate-initial-data.yaml
+      relativeToChangelogFile: true 

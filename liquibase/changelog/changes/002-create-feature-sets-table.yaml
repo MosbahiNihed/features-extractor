@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002
+      author: feature-engineering
+      changes:
+        - createTable:
+            tableName: feature_sets
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: features
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            tableName: feature_sets
+            indexName: idx_feature_sets_name
+            columns:
+              - column:
+                  name: name 

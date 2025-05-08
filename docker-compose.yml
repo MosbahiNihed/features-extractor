@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: feature_engineering
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase:4.20.0
+    command: --changelog-file=changelog/db.changelog-master.yaml --url=jdbc:postgresql://db:5432/feature_engineering --username=postgres --password=postgres update
+    volumes:
+      - ./liquibase/changelog:/liquibase/changelog
+    depends_on:
+      db:
+        condition: service_healthy
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/feature_engineering
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - liquibase
+
+volumes:
+  postgres_data:
