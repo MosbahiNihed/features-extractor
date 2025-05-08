@@ -6,7 +6,8 @@ from typing import List, Optional
 class CustomerService:
     @staticmethod
     def create_customer(db: Session, customer: CustomerCreate) -> Customer:
-        db_customer = Customer(**customer.model_dump())
+        print(customer)
+        db_customer = Customer(**customer.__dict__)
         db.add(db_customer)
         db.commit()
         db.refresh(db_customer)

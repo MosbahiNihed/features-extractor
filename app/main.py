@@ -1,11 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import customers
-from app.db.database import engine, Base
+from app.api.endpoints import customers, ml
+from app.api.prediction_endpoints import router
+from app.db.database import engine
+from app.models import Base
+import logging
+import sys
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Feature Engineering API",
-    description="API for customer churn prediction with feature engineering",
+    description="API for customer feature engineering and ML model training",
     version="1.0.0"
 )
 
@@ -19,21 +35,13 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(customers.router, prefix="/api/v1/customers", tags=["customers"])
-
-@app.on_event("startup")
-async def startup_event():
-    # Create database tables
-    Base.metadata.create_all(bind=engine)
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    # Cleanup resources if needed
-    pass
+app.include_router(customers.router, prefix="/api/v1", tags=["customers"])
+app.include_router(ml.router, prefix="/api/v1", tags=["insights"])
+app.include_router(router, prefix="/api/v1", tags=["predict"])
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Feature Engineering API"}
+    return {"message": "Welcome to the Feature Engineering API"}
 
 @app.get("/health")
 async def health_check():

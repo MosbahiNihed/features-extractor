@@ -7,7 +7,7 @@ from app.services.customer_service import CustomerService
 
 router = APIRouter()
 
-@router.post("/", response_model=Customer)
+@router.post("/")
 def create_customer(customer: CustomerCreate, db: Session = Depends(get_db)):
     """
     Create a new customer
@@ -17,7 +17,7 @@ def create_customer(customer: CustomerCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Customer ID already registered")
     return CustomerService.create_customer(db, customer)
 
-@router.get("/", response_model=List[Customer])
+@router.get("/")
 def read_customers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """
     Retrieve customers
@@ -25,7 +25,7 @@ def read_customers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     customers = CustomerService.get_customers(db, skip=skip, limit=limit)
     return customers
 
-@router.get("/{customer_id}", response_model=Customer)
+@router.get("/{customer_id}")
 def read_customer(customer_id: int, db: Session = Depends(get_db)):
     """
     Retrieve a specific customer by ID
